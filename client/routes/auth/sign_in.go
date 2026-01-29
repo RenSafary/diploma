@@ -1,34 +1,42 @@
 package auth
 
 import (
-	"context"
-	authpb "diploma/proto/auth"
-	"google.golang.org/grpc"
+	grpc_auth "diploma/client/grpc/auth"
+	"encoding/json"
 	"log"
-	"time"
+	"net/http"
+
+	"github.com/gorilla/mux"
 )
 
-func SignIn(username, password string) (bool, string) {
-	conn, err := grpc.Dial("localhost:50051", grpc.WithInsecure())
-	if err != nil {
-		log.Println(err)
-		return false, "Couldn't connect to gRPC server"
-	}
-	defer conn.Close()
+func SignIn(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
 
-	client := authpb.NewAuthServiceClient(conn)
+	vars := mux.Vars(r)
 
-	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
-	defer cancel()
+	username := vars["username"]
+	password := vars["password"]
 
-	resp, err := client.SignIn(ctx, &authpb.SignInRequest{
-		Username: username,
-		Password: password,
-	})
-	if err != nil {
-		log.Println(err)
-		return false, "Couldn't request 'SignIn' service"
+	if username == "" || password == "" {
+		log.Println("User's data is empty")
+		http.Error(w, "username or password is empty", http.StatusBadRequest)
+		return
 	}
 
-	return resp.Status, resp.Token
+	status, token := grpc_auth.GRPC_SignIn(username, password)
+	if status == false {
+		http.Error(w, "Couldn't sign in", http.StatusUnauthorized)
+		return
+	}
+
+	response := map[string]interface{}{
+		"status": status,
+		"token":  token,
+	}
+
+	w.WriteHeader(http.StatusOK)
+
+	if err := json.NewEncoder(w).Encode(response); err != nil {
+		log.Println("JSON encode error:", err)
+	}
 }
