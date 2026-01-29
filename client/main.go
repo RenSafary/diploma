@@ -12,6 +12,9 @@ import (
 func main() {
 	r := mux.NewRouter()
 
+	static := http.FileServer(http.Dir("./static"))
+	r.PathPrefix("/static/").Handler(http.StripPrefix("/static/", static))
+
 	r.HandleFunc("/", routes.MainPage).Methods("GET")
 
 	// authentication
