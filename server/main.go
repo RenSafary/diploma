@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"diploma/db"
 	authpb "diploma/proto/auth"
 	"log"
 	"net"
@@ -11,10 +12,16 @@ import (
 
 type AuthService struct {
 	authpb.UnimplementedAuthServiceServer
+	DB *db.ClinicDB
 }
 
 func (s *AuthService) SignIn(ctx context.Context, req *authpb.SignInRequest) (*authpb.SignInResponse, error) {
-	return &authpb.SignInResponse{Status: true, Token: "Hello, world!"}, nil
+	token, err := s.DB.GetClient(req.Username, req.Password)
+	if err != nil {
+		return &authpb.SignInResponse{Status: false, Token: ""}, err
+	}
+
+	return &authpb.SignInResponse{Status: true, Token: token}, nil
 }
 
 func main() {
@@ -23,8 +30,16 @@ func main() {
 		log.Fatal("Error at gRPC Auth server.", err)
 	}
 
+	db, err := db.Conn()
+	if err != nil {
+		log.Fatal("gRPC server error with DB: ", err)
+		return
+	}
+
 	grpcServer := grpc.NewServer()
-	authpb.RegisterAuthServiceServer(grpcServer, &AuthService{})
+	authpb.RegisterAuthServiceServer(grpcServer, &AuthService{
+		DB: db,
+	})
 
 	log.Println("gRPC Auth server is listening on port :50051")
 	if err := grpcServer.Serve(ls); err != nil {
