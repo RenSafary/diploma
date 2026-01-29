@@ -1,6 +1,19 @@
 version: "3.9"
 
 services:
+  postgres:
+    image: postgres:16
+    container_name: diploma-db
+    restart: always
+    environment:
+      POSTGRES_USER: ilya
+      POSTGRES_PASSWORD: 123
+      POSTGRES_DB: clinic
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
   auth:
     build:
       context: .
@@ -8,6 +21,14 @@ services:
     container_name: auth-service
     ports:
       - "50051:50051"
+    depends_on:
+      - postgres
+    environment:
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_USER: ilya
+      DB_PASSWORD: 123
+      DB_NAME: clinic
 
   client:
     build:
@@ -18,3 +39,6 @@ services:
       - "8080:8080"
     depends_on:
       - auth
+
+volumes:
+  postgres_data:
