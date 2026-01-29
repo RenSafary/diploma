@@ -1,0 +1,87 @@
+/* Общий стиль страницы */
+        body {
+            font-family: Arial, sans-serif;
+            background: #e6f2ff; /* светло-голубой фон */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        /* Контейнер формы */
+        .login-container {
+            background: #ffffff; /* белый фон формы */
+            padding: 40px 50px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            width: 100%;
+            max-width: 400px;
+        }
+
+        /* Заголовок */
+        .login-container h1 {
+            text-align: center;
+            color: #007acc; /* ярко-голубой */
+            margin-bottom: 30px;
+        }
+
+        /* Поля ввода */
+        input[type="text"],
+        input[type="password"] {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0 20px 0;
+            border: 1px solid #cce0ff;
+            border-radius: 6px;
+            box-sizing: border-box;
+            font-size: 16px;
+        }
+
+        input[type="text"]:focus,
+        input[type="password"]:focus {
+            border-color: #007acc;
+            outline: none;
+            box-shadow: 0 0 5px rgba(0, 122, 204, 0.5);
+        }
+
+        /* Кнопка входа */
+        button {
+            width: 100%;
+            padding: 12px;
+            background-color: #007acc;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #005f99;
+        }
+
+        /* Ссылки */
+        .login-links {
+            margin-top: 15px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .login-links a {
+            text-decoration: none;
+            color: #007acc;
+            font-size: 14px;
+        }
+
+        .login-links a:hover {
+            text-decoration: underline;
+        }
+
+        /* Мобильная адаптация */
+        @media (max-width: 480px) {
+            .login-container {
+                padding: 30px 20px;
+            }
+        }
