@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Авторизация</title>
+    <link rel="stylesheet" href="/static/auth/sign-in.css">
+</head>
+<body>
+    <div class="login-container">
+        <h1>Вход в поликлинику</h1>
+        <form method="POST" action="/sign-in">
+            <input type="text" name="username" placeholder="Логин" required>
+            <input type="password" name="password" placeholder="Пароль" required>
+            <button type="submit">Войти</button>
+            <div class="login-links">
+                <a href="/forget-pass">Забыл пароль</a>
+                <a href="/sign-up">Регистрация</a>
+            </div>
+        </form>
+    </div>
+</body>
+</html>
