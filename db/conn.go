@@ -6,7 +6,6 @@ import (
 	"log"
 	"os"
 
-	"github.com/joho/godotenv"
 	_ "github.com/lib/pq"
 )
 
@@ -15,11 +14,6 @@ type ClinicDB struct {
 }
 
 func getEnvVariablesDB() string {
-	if err := godotenv.Load(); err != nil {
-		log.Println("Couldn't get env variables for DB", err)
-		return ""
-	}
-
 	user := os.Getenv("DB_USER")
 	password := os.Getenv("DB_PASSWORD")
 	db_name := os.Getenv("DB_NAME")
@@ -27,7 +21,7 @@ func getEnvVariablesDB() string {
 	port := os.Getenv("DB_PORT")
 	sslmode := os.Getenv("DB_SSLMODE")
 
-	connStr := fmt.Sprintf("user=%s password=%s dbname=%s host=%s port=%s sslmode=%s", user, password, db_name, host, port, sslmode)
+	connStr := fmt.Sprintf("user=%s password=%s dbname=%s host=%s port=%s sslmode=%s search_path=public", user, password, db_name, host, port, sslmode)
 
 	return connStr
 }
@@ -45,20 +39,37 @@ func Conn() (*ClinicDB, error) {
 		return nil, err
 	}
 
+	createTable := `
+	CREATE TABLE IF NOT EXISTS clients (
+		Id SERIAL PRIMARY KEY,
+		Username VARCHAR(250),
+		Passwd VARCHAR(250),
+		FirstName VARCHAR(100),
+		LastName VARCHAR(100),
+		Email VARCHAR(250),
+		Age INTEGER,
+		Sex CHAR(1)
+	);
+	`
+	if _, err := db.Exec(createTable); err != nil {
+		log.Println("Couldn't create clients table:", err)
+		return nil, err
+	}
+
 	return &ClinicDB{DB: db}, nil
 }
 
 func (d *ClinicDB) GetClient(username, password string) (string, error) {
 	var db_pass string
 	err := d.DB.QueryRow(
-		"SELECT password FROM users WHERE username=$1", username,
+		"SELECT passwd FROM clients WHERE username=$1", username,
 	).Scan(&db_pass)
 
 	if err == sql.ErrNoRows {
-		log.Println("User does not exist: ", err)
+		log.Println("Client does not exist: ", err)
 		return "", err
 	} else if err != nil {
-		log.Println("Wrong user's password: ", err)
+		log.Println(err)
 		return "", err
 	}
 
