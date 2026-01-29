@@ -29,6 +29,7 @@ services:
       DB_USER: ilya
       DB_PASSWORD: 123
       DB_NAME: clinic
+      DB_SSLMODE: disable
 
   client:
     build:
