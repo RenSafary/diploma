@@ -2,6 +2,7 @@ package main
 
 import (
 	"diploma/client/routes"
+	"diploma/client/routes/auth"
 	"log"
 	"net/http"
 
@@ -12,6 +13,7 @@ func main() {
 	r := mux.NewRouter()
 
 	r.HandleFunc("/", routes.MainPage).Methods("GET")
+	r.HandleFunc("/sign-in/{username}/{password}", auth.SignIn).Methods("GET")
 
 	log.Println("Server is started on port :8080")
 	if err := http.ListenAndServe(":8080", r); err != nil {
