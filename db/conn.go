@@ -36,12 +36,31 @@ func Conn() (*ClinicDB, error) {
 	connStr := getEnvVariablesDB()
 	db, err := sql.Open("postgres", connStr)
 	if err != nil {
+		log.Println("Couldn't connect to DB", err)
 		return nil, err
 	}
 
 	if err := db.Ping(); err != nil {
+		log.Println("DB does not work", err)
 		return nil, err
 	}
 
 	return &ClinicDB{DB: db}, nil
+}
+
+func (d *ClinicDB) GetClient(username, password string) (string, error) {
+	var db_pass string
+	err := d.DB.QueryRow(
+		"SELECT password FROM users WHERE username=$1", username,
+	).Scan(&db_pass)
+
+	if err == sql.ErrNoRows {
+		log.Println("User does not exist: ", err)
+		return "", err
+	} else if err != nil {
+		log.Println("Wrong user's password: ", err)
+		return "", err
+	}
+
+	return "Hello, world!", nil // instead of the token before development
 }
