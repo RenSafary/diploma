@@ -2,11 +2,22 @@ package auth
 
 import (
 	grpc_auth "diploma/client/grpc/auth"
-	"encoding/json"
 	"html/template"
 	"log"
 	"net/http"
+
+	"github.com/gorilla/websocket"
 )
+
+var upgrader = websocket.Upgrader{
+	ReadBufferSize:  1024,
+	WriteBufferSize: 1024,
+}
+
+type Client struct {
+	Username string `json:"username"`
+	Password string `json:"password"`
+}
 
 func SignInForm(w http.ResponseWriter, r *http.Request) {
 	tmpl, err := template.ParseFiles("./templates/auth/sign-in.html")
@@ -19,27 +30,34 @@ func SignInForm(w http.ResponseWriter, r *http.Request) {
 	tmpl.Execute(w, nil)
 }
 
-func SignInPost(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Content-Type", "application/json")
-
-	if err := r.ParseForm(); err != nil {
-		http.Error(w, "Unable to parse form", http.StatusBadRequest)
+func SignInWS(w http.ResponseWriter, r *http.Request) {
+	ws, err := upgrader.Upgrade(w, r, nil)
+	if err != nil {
+		log.Println("Err with sign in ws: ", err)
 		return
 	}
+	defer ws.Close()
 
-	username := r.FormValue("username")
-	password := r.FormValue("password")
+	for {
+		// get data from front-end
+		var client Client
+		err := ws.ReadJSON(&client)
+		if err != nil {
+			log.Println("Error reading JSON:", err)
+			continue
+		}
 
-	status, token := grpc_auth.GRPC_SignIn(username, password)
-	if !status {
-		http.Error(w, "Couldn't sign in", http.StatusUnauthorized)
-		return
+		status, token := grpc_auth.GRPC_SignIn(client.Username, client.Password)
+		response := map[string]interface{}{
+			"status": status,
+			"token":  token,
+		}
+
+		// send back to client
+		err = ws.WriteJSON(response)
+		if err != nil {
+			log.Println("Error writing JSON to ws:", err)
+			continue
+		}
 	}
-
-	response := map[string]interface{}{
-		"status": status,
-		"token":  token,
-	}
-
-	json.NewEncoder(w).Encode(response)
 }
