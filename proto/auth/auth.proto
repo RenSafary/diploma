@@ -2,12 +2,17 @@ syntax = "proto3";
 
 package auth;
 
-option go_package = "Diploma/proto/auth;authpb";
+option go_package = "diploma/proto/auth;authpb";
 
 // Sign Up
 message SignUpRequest {
     string username = 1;
     string password = 2;
+    string firstname = 3;
+    string lastname = 4;
+    string email = 5;
+    string sex = 6;
+    string age = 7;
 }
 
 message SignUpResponse {
