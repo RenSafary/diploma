@@ -2,6 +2,7 @@ package db
 
 import (
 	"database/sql"
+	"diploma/utils"
 	"log"
 	"strconv"
 )
@@ -15,10 +16,10 @@ func ClientsInit(db *sql.DB) *Clients {
 }
 
 func (d *Clients) GetClient(username, password string) (string, error) {
-	var db_pass string
+	var hashedPass string
 	err := d.DB.QueryRow(
 		"SELECT passwd FROM clients WHERE username=$1", username,
-	).Scan(&db_pass)
+	).Scan(&hashedPass)
 
 	if err == sql.ErrNoRows {
 		log.Println("Client does not exist: ", err)
@@ -28,7 +29,9 @@ func (d *Clients) GetClient(username, password string) (string, error) {
 		return "", err
 	}
 
-	if db_pass != password {
+	// comparing password
+	err = utils.CompareHashPass(hashedPass, password)
+	if err != nil {
 		return "Wrong login or password", nil
 	}
 
@@ -41,10 +44,16 @@ func (c *Clients) CreateClient(username, password, firstname, lastname, email, s
 		return "", err
 	}
 
+	// making hashed password
+	hashedPass, err := utils.MakeHashed(password)
+	if err != nil {
+		return "", err
+	}
+
 	_, err = c.DB.Exec(
 		`INSERT INTO clients (Username, Passwd, FirstName, LastName, Email, Sex, Age)
          VALUES ($1,$2,$3,$4,$5,$6,$7)`,
-		username, password, firstname, lastname, email, sex, age_int,
+		username, hashedPass, firstname, lastname, email, sex, age_int,
 	)
 	if err != nil {
 		log.Println("Error inserting client:", err)
