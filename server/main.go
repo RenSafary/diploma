@@ -17,7 +17,7 @@ type AuthService struct {
 
 func (s *AuthService) SignIn(ctx context.Context, req *authpb.SignInRequest) (*authpb.SignInResponse, error) {
 	token, err := s.DB.GetClient(req.Username, req.Password)
-	if err != nil {
+	if err != nil || token == "Wrong login or password" {
 		return &authpb.SignInResponse{Status: false, Token: ""}, err
 	}
 
