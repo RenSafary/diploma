@@ -21,7 +21,7 @@ func main() {
 	// authentication
 	// sign in
 	r.HandleFunc("/sign-in", auth.SignInForm).Methods("GET")
-	r.HandleFunc("/sign-in", auth.SignInPost).Methods("POST")
+	r.HandleFunc("/sign-in-ws", auth.SignInWS)
 	//sign up
 	r.HandleFunc("/sign-up", auth.SignUpForm).Methods("GET")
 	r.HandleFunc("/sign-up", auth.SignUpPost).Methods("POST")
