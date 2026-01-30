@@ -11,7 +11,7 @@ import (
 func SignInForm(w http.ResponseWriter, r *http.Request) {
 	tmpl, err := template.ParseFiles("./templates/auth/sign-in.html")
 	if err != nil {
-		log.Println("Couldn't parse HTML 'main'... ", err)
+		log.Println("Couldn't parse HTML 'sign-in': ", err)
 		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
 		return
 	}
