@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/static/auth/sign-up.css">
+    <title>Регистрация</title>
+</head>
+<body>
+    <div class="login-container">
+    <h1>Регистрация</h1>
+    <form method="POST" action="/register">
+        <input type="text" name="username" placeholder="Логин" required>
+        <input type="password" name="password" placeholder="Пароль" required>
+        <input type="text" name="firstname" placeholder="Имя" required>
+        <input type="text" name="lastname" placeholder="Фамилия" required>
+        <input type="email" name="email" placeholder="Email" required>
+        <input type="number" name="age" placeholder="Возраст" required>
+
+        <select name="sex" required>
+            <option value="">Пол</option>
+            <option value="M">Мужской</option>
+            <option value="F">Женский</option>
+        </select>
+
+        <button type="submit">Зарегистрировать</button>
+        <div class="login-links">
+            <a href="/login">Уже зарегистрирован?</a>
+        </div>
+
+    </form>
+</div>
+</div>
+</body>
+</html>
