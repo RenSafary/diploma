@@ -73,5 +73,9 @@ func (d *ClinicDB) GetClient(username, password string) (string, error) {
 		return "", err
 	}
 
+	if db_pass != password {
+		return "Wrong login or password", nil
+	}
+
 	return "Hello, world!", nil // instead of the token before development
 }
