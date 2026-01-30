@@ -24,6 +24,13 @@ func (s *AuthService) SignIn(ctx context.Context, req *authpb.SignInRequest) (*a
 	return &authpb.SignInResponse{Status: true, Token: token}, nil
 }
 
+func (s *AuthService) SignUp(ctx context.Context, req *authpb.SignUpRequest) (*authpb.SignUpResponse, error) {
+	log.Println(req.Username, req.Password, req.Firstname, req.Lastname, req.Age, req.Sex)
+
+	token := "Hello, world!"
+	return &authpb.SignUpResponse{Status: true, Token: token}, nil
+}
+
 func main() {
 	ls, err := net.Listen("tcp", ":50051")
 	if err != nil {
