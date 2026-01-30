@@ -2,6 +2,7 @@ package db
 
 import (
 	"database/sql"
+	db_cli "diploma/db/users"
 	"fmt"
 	"log"
 	"os"
@@ -10,7 +11,8 @@ import (
 )
 
 type ClinicDB struct {
-	DB *sql.DB
+	DB      *sql.DB
+	Clients *db_cli.Clients // struct to control the table
 }
 
 func getEnvVariablesDB() string {
@@ -56,26 +58,8 @@ func Conn() (*ClinicDB, error) {
 		return nil, err
 	}
 
-	return &ClinicDB{DB: db}, nil
-}
-
-func (d *ClinicDB) GetClient(username, password string) (string, error) {
-	var db_pass string
-	err := d.DB.QueryRow(
-		"SELECT passwd FROM clients WHERE username=$1", username,
-	).Scan(&db_pass)
-
-	if err == sql.ErrNoRows {
-		log.Println("Client does not exist: ", err)
-		return "", err
-	} else if err != nil {
-		log.Println(err)
-		return "", err
-	}
-
-	if db_pass != password {
-		return "Wrong login or password", nil
-	}
-
-	return "Hello, world!", nil // instead of the token before development
+	return &ClinicDB{
+		DB:      db,
+		Clients: db_cli.ClientsInit(db),
+	}, nil
 }
