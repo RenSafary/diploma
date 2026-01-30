@@ -3,15 +3,16 @@ package grpc_auth
 import (
 	"context"
 	authpb "diploma/proto/auth"
-	"google.golang.org/grpc"
 	"log"
 	"time"
+
+	"google.golang.org/grpc"
 )
 
 func GRPC_SignIn(username, password string) (bool, string) {
 	conn, err := grpc.Dial("auth:50051", grpc.WithInsecure())
 	if err != nil {
-		log.Println("Couldn't connect to gRPC server", err)
+		log.Println("Couldn't connect to gRPC auth server", err)
 		return false, ""
 	}
 	defer conn.Close()
