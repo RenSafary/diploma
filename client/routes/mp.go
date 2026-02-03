@@ -7,14 +7,20 @@ import (
 )
 
 func MainPage(w http.ResponseWriter, r *http.Request) {
-	if _, err := r.Cookie("token"); err != nil {
-		http.Redirect(w, r, "/sign-in", http.StatusPermanentRedirect)
+	log.Println("Got / request")
+
+	token, err := r.Cookie("jwt")
+	if err != nil {
+		log.Println("No JWT cookie:", err)
+		http.Redirect(w, r, "/sign-in", http.StatusFound)
 		return
 	}
 
+	log.Println("JWT token:", token.Value)
+
 	tmpl, err := template.ParseFiles("./templates/main.html")
 	if err != nil {
-		log.Println("Couldn't parse HTML 'main'... ", err)
+		log.Println("Couldn't parse HTML 'main':", err)
 		return
 	}
 
