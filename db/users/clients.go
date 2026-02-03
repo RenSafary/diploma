@@ -15,11 +15,18 @@ func ClientsInit(db *sql.DB) *Clients {
 	return &Clients{DB: db}
 }
 
+type Client struct {
+	Id       int
+	Username string
+	Password string
+}
+
 func (d *Clients) GetClient(username, password string) (string, error) {
-	var hashedPass string
+	client := &Client{}
+
 	err := d.DB.QueryRow(
-		"SELECT passwd FROM clients WHERE username=$1", username,
-	).Scan(&hashedPass)
+		"SELECT id, passwd FROM clients WHERE username=$1", username,
+	).Scan(&client.Id, &client.Password)
 
 	if err == sql.ErrNoRows {
 		log.Println("Client does not exist: ", err)
@@ -30,12 +37,18 @@ func (d *Clients) GetClient(username, password string) (string, error) {
 	}
 
 	// comparing password
-	err = utils.CompareHashPass(hashedPass, password)
+	err = utils.CompareHashPass(client.Password, password)
 	if err != nil {
 		return "Wrong login or password", nil
 	}
 
-	return "Hello, world!", nil // instead of the token before development
+	// giving jwt token
+	token, err := utils.GenerateToken(client.Id, username)
+	if err != nil {
+		return "Wrong login or password", nil
+	}
+
+	return token, nil
 }
 
 func (c *Clients) CreateClient(username, password, firstname, lastname, email, sex, age string) (string, error) {
@@ -59,5 +72,6 @@ func (c *Clients) CreateClient(username, password, firstname, lastname, email, s
 		log.Println("Error inserting client:", err)
 		return "", err
 	}
+
 	return "Hello, world!", nil
 }

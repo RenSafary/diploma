@@ -8,7 +8,8 @@ document.addEventListener("DOMContentLoaded", () => {
     ws.onmessage = (event) => {
         const data = JSON.parse(event.data);
         if (data.status) {
-            alert("Вход успешен! Токен: " + data.token);
+            alert("Вход успешен!");
+            document.cookie = "jwt=" + data.token + "; path=/; max-age=3600; samesite=lax";
             window.location.href = "/";
         } else {
             alert("Неверный логин или пароль");
