@@ -2,6 +2,7 @@ package auth
 
 import (
 	grpc_auth "diploma/client/grpc/auth"
+	"encoding/json"
 	"html/template"
 	"log"
 	"net/http"
@@ -12,6 +13,9 @@ import (
 var upgrader = websocket.Upgrader{
 	ReadBufferSize:  1024,
 	WriteBufferSize: 1024,
+	CheckOrigin: func(r *http.Request) bool {
+		return true
+	},
 }
 
 type Client struct {
@@ -39,25 +43,43 @@ func SignInWS(w http.ResponseWriter, r *http.Request) {
 	defer ws.Close()
 
 	for {
-		// get data from front-end
 		var client Client
-		err := ws.ReadJSON(&client)
-		if err != nil {
+		if err := ws.ReadJSON(&client); err != nil {
 			log.Println("Error reading JSON:", err)
-			continue
+			return
 		}
 
 		status, token := grpc_auth.GRPC_SignIn(client.Username, client.Password)
-		response := map[string]interface{}{
+		resp := map[string]interface{}{
 			"status": status,
 			"token":  token,
 		}
 
-		// send back to client
-		err = ws.WriteJSON(response)
-		if err != nil {
+		if err := ws.WriteJSON(resp); err != nil {
 			log.Println("Error writing JSON to ws:", err)
-			continue
+			return
 		}
 	}
+}
+
+func PutToken(w http.ResponseWriter, r *http.Request) {
+	var body struct {
+		Token string `json:"token"`
+	}
+
+	if err := json.NewDecoder(r.Body).Decode(&body); err != nil {
+		http.Error(w, "Invalid request", http.StatusBadRequest)
+		return
+	}
+
+	http.SetCookie(w, &http.Cookie{
+		Name:     "jwt",
+		Value:    body.Token,
+		Path:     "/",
+		MaxAge:   3600,
+		HttpOnly: true,
+		SameSite: http.SameSiteLaxMode,
+	})
+
+	w.WriteHeader(http.StatusOK)
 }
