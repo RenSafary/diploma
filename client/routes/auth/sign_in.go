@@ -2,6 +2,7 @@ package auth
 
 import (
 	grpc_auth "diploma/client/grpc/auth"
+	"diploma/utils"
 	"encoding/json"
 	"html/template"
 	"log"
@@ -25,9 +26,12 @@ type Client struct {
 
 func SignInForm(w http.ResponseWriter, r *http.Request) {
 	// Checking jwt token
-	if _, err := r.Cookie("jwt"); err == nil {
-		http.Redirect(w, r, "/", http.StatusTemporaryRedirect)
-		return
+	if token, err := r.Cookie("jwt"); err == nil {
+		_, _, err = utils.ParseToken(token.Value)
+		if err == nil {
+			http.Redirect(w, r, "/", http.StatusTemporaryRedirect)
+			return
+		}
 	}
 
 	// Parse if there is one
@@ -71,9 +75,12 @@ func SignInWS(w http.ResponseWriter, r *http.Request) {
 
 func PutToken(w http.ResponseWriter, r *http.Request) {
 	// Checking jwt token
-	if _, err := r.Cookie("jwt"); err == nil {
-		http.Redirect(w, r, "/", http.StatusTemporaryRedirect) // redirect if there is one
-		return
+	if token, err := r.Cookie("jwt"); err == nil {
+		_, _, err = utils.ParseToken(token.Value)
+		if err == nil {
+			http.Redirect(w, r, "/", http.StatusTemporaryRedirect)
+			return
+		}
 	}
 
 	var body struct {

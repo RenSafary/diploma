@@ -2,6 +2,7 @@ package auth
 
 import (
 	grpc_auth "diploma/client/grpc/auth"
+	"diploma/utils"
 	"encoding/json"
 	"html/template"
 	"log"
@@ -10,9 +11,12 @@ import (
 
 func SignUpForm(w http.ResponseWriter, r *http.Request) {
 	// Checking jwt token
-	if _, err := r.Cookie("jwt"); err == nil {
-		http.Redirect(w, r, "/", http.StatusTemporaryRedirect)
-		return
+	if token, err := r.Cookie("jwt"); err == nil {
+		_, _, err = utils.ParseToken(token.Value)
+		if err == nil {
+			http.Redirect(w, r, "/", http.StatusTemporaryRedirect)
+			return
+		}
 	}
 
 	// Parse template if there is one
@@ -28,9 +32,12 @@ func SignUpForm(w http.ResponseWriter, r *http.Request) {
 
 func SignUpPost(w http.ResponseWriter, r *http.Request) {
 	// Checking jwt token
-	if _, err := r.Cookie("jwt"); err == nil {
-		http.Redirect(w, r, "/", http.StatusTemporaryRedirect) // redirect if there is one
-		return
+	if token, err := r.Cookie("jwt"); err == nil {
+		_, _, err = utils.ParseToken(token.Value)
+		if err == nil {
+			http.Redirect(w, r, "/", http.StatusTemporaryRedirect)
+			return
+		}
 	}
 
 	w.Header().Set("Content-Type", "application/json")
