@@ -7,7 +7,7 @@ RUN go mod download
 
 COPY . .
 
-WORKDIR /app/server
+WORKDIR /app/auth-service
 
 RUN go build -o auth-service
 
