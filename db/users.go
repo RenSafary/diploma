@@ -19,14 +19,15 @@ type User struct {
 	Id       int
 	Username string
 	Password string
+	Admin    bool
 }
 
 func (d *Users) GetUser(username, password string) (string, error) {
 	user := &User{}
 
 	err := d.DB.QueryRow(
-		"SELECT id, passwd FROM users WHERE username=$1", username,
-	).Scan(&user.Id, &user.Password)
+		"SELECT id, passwd, adm FROM users WHERE username=$1", username,
+	).Scan(&user.Id, &user.Password, &user.Admin)
 
 	if err == sql.ErrNoRows {
 		log.Println("User does not exist: ", err)
@@ -43,7 +44,7 @@ func (d *Users) GetUser(username, password string) (string, error) {
 	}
 
 	// giving jwt token
-	token, err := utils.GenerateToken(user.Id, username)
+	token, err := utils.GenerateToken(user.Id, username, user.Admin)
 	if err != nil {
 		return "Wrong login or password", nil
 	}
@@ -65,7 +66,7 @@ func (c *Users) CreateUser(username, password, firstname, lastname, email, sex, 
 
 	_, err = c.DB.Exec(
 		`INSERT INTO users (Username, Passwd, FirstName, LastName, Email, Sex, Age, Adm)
-         VALUES ($1,$2,$3,$4,$5,$6,$7, $8)`,
+         VALUES ($1,$2,$3,$4,$5,$6,$7,$8)`,
 		username, hashedPass, firstname, lastname, email, sex, age_int, false,
 	)
 	if err != nil {

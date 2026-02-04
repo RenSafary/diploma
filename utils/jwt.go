@@ -8,10 +8,11 @@ import (
 	"github.com/golang-jwt/jwt/v5"
 )
 
-func GenerateToken(userId int, username string) (string, error) {
+func GenerateToken(userId int, username string, admin bool) (string, error) {
 	claims := jwt.MapClaims{
 		"user_id":  userId,
 		"username": username,
+		"admin":    admin,
 		"exp":      time.Now().Add(time.Hour * 24).Unix(),
 	}
 
@@ -25,10 +26,11 @@ func GenerateToken(userId int, username string) (string, error) {
 type Claims struct {
 	UserID   int    `json:"user_id"`
 	Username string `json:"username"`
+	Admin    bool   `json:"admin"`
 	jwt.RegisteredClaims
 }
 
-func ParseToken(tokenStr string) (int, string, error) {
+func ParseToken(tokenStr string) (int, string, bool, error) {
 	secretKey := os.Getenv("JWT_KEY")
 
 	claims := &Claims{}
@@ -38,8 +40,8 @@ func ParseToken(tokenStr string) (int, string, error) {
 	})
 
 	if err != nil || !token.Valid {
-		return 0, "", fmt.Errorf("Invalid JWT token")
+		return 0, "", false, fmt.Errorf("Invalid JWT token")
 	}
 
-	return claims.UserID, claims.Username, nil
+	return claims.UserID, claims.Username, claims.Admin, nil
 }
