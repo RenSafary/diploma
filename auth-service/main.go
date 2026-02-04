@@ -2,7 +2,7 @@ package main
 
 import (
 	"context"
-	"diploma/auth-service/db"
+	"diploma/db"
 	authpb "diploma/proto/auth"
 	"log"
 	"net"

@@ -2,16 +2,16 @@ package db
 
 import (
 	"database/sql"
+	users_db "diploma/auth-service/db"
 	"fmt"
+	_ "github.com/lib/pq"
 	"log"
 	"os"
-
-	_ "github.com/lib/pq"
 )
 
 type ClinicDB struct {
 	DB    *sql.DB
-	Users *Users // struct to control the table
+	Users *users_db.Users // struct to control the table
 }
 
 func getEnvVariablesDB() string {
@@ -42,6 +42,6 @@ func Conn() (*ClinicDB, error) {
 
 	return &ClinicDB{
 		DB:    db,
-		Users: UsersInit(db),
+		Users: users_db.UsersInit(db),
 	}, nil
 }
