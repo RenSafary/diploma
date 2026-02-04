@@ -2,7 +2,6 @@ package db
 
 import (
 	"database/sql"
-	db_cli "diploma/db/users"
 	"fmt"
 	"log"
 	"os"
@@ -11,8 +10,8 @@ import (
 )
 
 type ClinicDB struct {
-	DB      *sql.DB
-	Clients *db_cli.Clients // struct to control the table
+	DB    *sql.DB
+	Users *Users // struct to control the table
 }
 
 func getEnvVariablesDB() string {
@@ -41,25 +40,8 @@ func Conn() (*ClinicDB, error) {
 		return nil, err
 	}
 
-	createTable := `
-	CREATE TABLE IF NOT EXISTS clients (
-		Id SERIAL PRIMARY KEY,
-		Username VARCHAR(250),
-		Passwd VARCHAR(250),
-		FirstName VARCHAR(100),
-		LastName VARCHAR(100),
-		Email VARCHAR(250),
-		Age INTEGER,
-		Sex CHAR(1)
-	);
-	`
-	if _, err := db.Exec(createTable); err != nil {
-		log.Println("Couldn't create clients table:", err)
-		return nil, err
-	}
-
 	return &ClinicDB{
-		DB:      db,
-		Clients: db_cli.ClientsInit(db),
+		DB:    db,
+		Users: UsersInit(db),
 	}, nil
 }

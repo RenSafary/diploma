@@ -1,4 +1,4 @@
-CREATE TABLE clients
+CREATE TABLE users
 (
     Id SERIAL PRIMARY KEY,
     Username VARCHAR(250),
@@ -7,5 +7,6 @@ CREATE TABLE clients
     LastName VARCHAR(100),
     Email VARCHAR(250),
     Age INTEGER,
-    Sex CHAR(1)
+    Sex CHAR(1),
+    Adm BOOLEAN NOT NULL
 );
