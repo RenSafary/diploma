@@ -24,6 +24,10 @@ func main() {
 	r.HandleFunc("/sign-in-ws", auth.SignInWS)
 	r.HandleFunc("/sign-in/put-token", auth.PutToken).Methods("POST")
 
+	// Registration
+	r.HandleFunc("/sign-up", auth.SignUpForm).Methods("GET")
+	r.HandleFunc("/sign-up", auth.SignUpPost).Methods("POST")
+
 	log.Println("Server is started on port :8080")
 	if err := http.ListenAndServe(":8080", r); err != nil {
 		log.Fatal("Couldn't start the server:", err)
