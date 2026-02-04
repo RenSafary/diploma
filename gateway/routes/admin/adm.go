@@ -1,7 +1,7 @@
 package admin
 
 import (
-	"diploma/utils"
+	"diploma/auth-service/utils"
 	"html/template"
 	"net/http"
 )

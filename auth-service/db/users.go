@@ -2,7 +2,7 @@ package db
 
 import (
 	"database/sql"
-	"diploma/utils"
+	"diploma/auth-service/utils"
 	"log"
 	"strconv"
 )
@@ -22,7 +22,7 @@ type User struct {
 	Admin    bool
 }
 
-func (d *Users) GetUser(username, password string) (string, error) {
+func (d *Users) GiveToken(username, password string) (string, error) {
 	user := &User{}
 
 	err := d.DB.QueryRow(

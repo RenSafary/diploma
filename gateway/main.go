@@ -1,9 +1,9 @@
 package main
 
 import (
-	"diploma/client/routes"
-	"diploma/client/routes/admin"
-	"diploma/client/routes/auth"
+	"diploma/gateway/routes"
+	"diploma/gateway/routes/admin"
+	"diploma/gateway/routes/auth"
 	"log"
 	"net/http"
 

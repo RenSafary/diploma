@@ -2,7 +2,7 @@ package main
 
 import (
 	"context"
-	"diploma/db"
+	"diploma/auth-service/db"
 	authpb "diploma/proto/auth"
 	"log"
 	"net"
@@ -16,7 +16,7 @@ type AuthService struct {
 }
 
 func (s *AuthService) SignIn(ctx context.Context, req *authpb.SignInRequest) (*authpb.SignInResponse, error) {
-	token, err := s.DB.Users.GetUser(req.Username, req.Password)
+	token, err := s.DB.Users.GiveToken(req.Username, req.Password)
 	if err != nil || token == "Wrong login or password" {
 		return &authpb.SignInResponse{Status: false, Token: ""}, err
 	}
