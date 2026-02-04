@@ -26,7 +26,7 @@ type Client struct {
 
 func SignInForm(w http.ResponseWriter, r *http.Request) {
 	// Checking jwt token
-	if token, err := r.Cookie("jwt"); err == nil {
+	if token, err := r.Cookie("user"); err == nil {
 		_, _, err = utils.ParseToken(token.Value)
 		if err == nil {
 			http.Redirect(w, r, "/", http.StatusTemporaryRedirect)
@@ -75,7 +75,7 @@ func SignInWS(w http.ResponseWriter, r *http.Request) {
 
 func PutToken(w http.ResponseWriter, r *http.Request) {
 	// Checking jwt token
-	if token, err := r.Cookie("jwt"); err == nil {
+	if token, err := r.Cookie("user"); err == nil {
 		_, _, err = utils.ParseToken(token.Value)
 		if err == nil {
 			http.Redirect(w, r, "/", http.StatusTemporaryRedirect)
@@ -93,7 +93,7 @@ func PutToken(w http.ResponseWriter, r *http.Request) {
 	}
 
 	http.SetCookie(w, &http.Cookie{
-		Name:     "jwt",
+		Name:     "user",
 		Value:    body.Token,
 		Path:     "/",
 		MaxAge:   3600,

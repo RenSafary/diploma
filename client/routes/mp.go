@@ -9,7 +9,7 @@ import (
 func MainPage(w http.ResponseWriter, r *http.Request) {
 	log.Println("Got / request")
 
-	token, err := r.Cookie("jwt")
+	token, err := r.Cookie("user")
 	if err != nil {
 		log.Println("No JWT cookie:", err)
 		http.Redirect(w, r, "/sign-in", http.StatusFound)
