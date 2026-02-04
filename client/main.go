@@ -30,6 +30,7 @@ func main() {
 	r.HandleFunc("/sign-up", auth.SignUpPost).Methods("POST")
 
 	// Admin panel
+	r.HandleFunc("/adm", admin.AdminPanel).Methods("GET", "POST")
 	r.HandleFunc("/adm/sign-in", admin.SignIn).Methods("GET", "POST")
 
 	log.Println("Server is started on port :8080")
