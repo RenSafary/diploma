@@ -17,7 +17,7 @@ services:
   auth:
     build:
       context: .
-      dockerfile: server/Dockerfile
+      dockerfile: auth-service/Dockerfile
     container_name: auth-service
     ports:
       - "50051:50051"
@@ -32,16 +32,34 @@ services:
       DB_SSLMODE: ${DB_SSLMODE}
       JWT_KEY: ${JWT_KEY}
 
-  client:
+  gateway:
     build:
       context: .
-      dockerfile: client/Dockerfile
+      dockerfile: gateway/Dockerfile
     container_name: api-gateway
     ports:
       - "8080:8080"
     depends_on:
       - auth
     environment: 
+      JWT_KEY: ${JWT_KEY}
+
+  admin:
+    build:
+      context: .
+      dockerfile: admin-service/Dockerfile
+    container_name: admin-service
+    ports: 
+      - "50052:50052"
+    depends_on:
+      - postgres
+    environment:
+      DB_HOST: ${DB_HOST}
+      DB_PORT: ${DB_PORT}
+      DB_USER: ${DB_USER}
+      DB_PASSWORD: ${DB_PASSWORD}
+      DB_NAME: ${DB_NAME}
+      DB_SSLMODE: ${DB_SSLMODE}
       JWT_KEY: ${JWT_KEY}
 
 volumes:
