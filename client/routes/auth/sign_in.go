@@ -24,12 +24,13 @@ type Client struct {
 }
 
 func SignInForm(w http.ResponseWriter, r *http.Request) {
-	_, err := r.Cookie("jwt")
-	if err == nil {
+	// Checking jwt token
+	if _, err := r.Cookie("jwt"); err == nil {
 		http.Redirect(w, r, "/", http.StatusTemporaryRedirect)
 		return
 	}
 
+	// Parse if there is one
 	tmpl, err := template.ParseFiles("./templates/auth/sign-in.html")
 	if err != nil {
 		log.Println("Couldn't parse HTML 'sign-in': ", err)
@@ -69,6 +70,12 @@ func SignInWS(w http.ResponseWriter, r *http.Request) {
 }
 
 func PutToken(w http.ResponseWriter, r *http.Request) {
+	// Checking jwt token
+	if _, err := r.Cookie("jwt"); err == nil {
+		http.Redirect(w, r, "/", http.StatusTemporaryRedirect) // redirect if there is one
+		return
+	}
+
 	var body struct {
 		Token string `json:"token"`
 	}

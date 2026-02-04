@@ -9,6 +9,13 @@ import (
 )
 
 func SignUpForm(w http.ResponseWriter, r *http.Request) {
+	// Checking jwt token
+	if _, err := r.Cookie("jwt"); err == nil {
+		http.Redirect(w, r, "/", http.StatusTemporaryRedirect)
+		return
+	}
+
+	// Parse template if there is one
 	tmpl, err := template.ParseFiles("./templates/auth/sign-up.html")
 	if err != nil {
 		log.Println("Couldn't parse HTML 'sign-up': ", err)
@@ -20,6 +27,12 @@ func SignUpForm(w http.ResponseWriter, r *http.Request) {
 }
 
 func SignUpPost(w http.ResponseWriter, r *http.Request) {
+	// Checking jwt token
+	if _, err := r.Cookie("jwt"); err == nil {
+		http.Redirect(w, r, "/", http.StatusTemporaryRedirect) // redirect if there is one
+		return
+	}
+
 	w.Header().Set("Content-Type", "application/json")
 
 	if err := r.ParseForm(); err != nil {
