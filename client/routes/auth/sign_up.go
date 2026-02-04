@@ -12,7 +12,7 @@ import (
 func SignUpForm(w http.ResponseWriter, r *http.Request) {
 	// Checking jwt token
 	if token, err := r.Cookie("user"); err == nil {
-		_, _, err = utils.ParseToken(token.Value)
+		_, _, _, err = utils.ParseToken(token.Value)
 		if err == nil {
 			http.Redirect(w, r, "/", http.StatusTemporaryRedirect)
 			return
@@ -33,7 +33,7 @@ func SignUpForm(w http.ResponseWriter, r *http.Request) {
 func SignUpPost(w http.ResponseWriter, r *http.Request) {
 	// Checking jwt token
 	if token, err := r.Cookie("user"); err == nil {
-		_, _, err = utils.ParseToken(token.Value)
+		_, _, _, err = utils.ParseToken(token.Value)
 		if err == nil {
 			http.Redirect(w, r, "/", http.StatusTemporaryRedirect)
 			return
