@@ -2,6 +2,7 @@ package main
 
 import (
 	"diploma/client/routes"
+	"diploma/client/routes/admin"
 	"diploma/client/routes/auth"
 	"log"
 	"net/http"
@@ -27,6 +28,9 @@ func main() {
 	// Registration
 	r.HandleFunc("/sign-up", auth.SignUpForm).Methods("GET")
 	r.HandleFunc("/sign-up", auth.SignUpPost).Methods("POST")
+
+	// Admin panel
+	r.HandleFunc("/adm/sign-in/", admin.SignIn).Methods("GET", "POST")
 
 	log.Println("Server is started on port :8080")
 	if err := http.ListenAndServe(":8080", r); err != nil {
