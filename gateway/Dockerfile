@@ -7,7 +7,7 @@ RUN go mod download
 
 COPY . .
 
-WORKDIR /app/client
+WORKDIR /app/gateway
 
 RUN go build -o api-gateway
 
