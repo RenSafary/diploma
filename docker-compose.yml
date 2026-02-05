@@ -41,6 +41,8 @@ services:
       - "8080:8080"
     depends_on:
       - auth
+      - admin
+      - users
     environment: 
       JWT_KEY: ${JWT_KEY}
 
@@ -51,6 +53,24 @@ services:
     container_name: admin-service
     ports: 
       - "50052:50052"
+    depends_on:
+      - postgres
+    environment:
+      DB_HOST: ${DB_HOST}
+      DB_PORT: ${DB_PORT}
+      DB_USER: ${DB_USER}
+      DB_PASSWORD: ${DB_PASSWORD}
+      DB_NAME: ${DB_NAME}
+      DB_SSLMODE: ${DB_SSLMODE}
+      JWT_KEY: ${JWT_KEY}
+  
+  users:
+    build:
+      context: .
+      dockerfile: users-service/Dockerfile
+    container_name: users-service
+    ports: 
+      - "50053:50053"
     depends_on:
       - postgres
     environment:
