@@ -2,7 +2,7 @@ package main
 
 import (
 	"context"
-	"diploma/db"
+	"diploma/auth-service/db"
 	authpb "diploma/proto/auth"
 	"log"
 	"net"
@@ -15,22 +15,13 @@ type AuthService struct {
 	DB *db.ClinicDB
 }
 
-func (s *AuthService) SignIn(ctx context.Context, req *authpb.SignInRequest) (*authpb.SignInResponse, error) {
+func (s *AuthService) Login(ctx context.Context, req *authpb.LoginRequest) (*authpb.LoginResponse, error) {
 	token, err := s.DB.Users.GiveToken(req.Username, req.Password)
 	if err != nil || token == "Wrong login or password" {
-		return &authpb.SignInResponse{Status: false, Token: ""}, err
+		return &authpb.LoginResponse{Status: false, Token: ""}, err
 	}
 
-	return &authpb.SignInResponse{Status: true, Token: token}, nil
-}
-
-func (s *AuthService) SignUp(ctx context.Context, req *authpb.SignUpRequest) (*authpb.SignUpResponse, error) {
-	token, err := s.DB.Users.CreateUser(req.Username, req.Password, req.Firstname, req.Lastname, req.Email, req.Sex, req.Age)
-	if err != nil {
-		return &authpb.SignUpResponse{Status: false, Token: token}, nil
-	}
-
-	return &authpb.SignUpResponse{Status: true, Token: token}, nil
+	return &authpb.LoginResponse{Status: true, Token: token}, nil
 }
 
 func main() {
