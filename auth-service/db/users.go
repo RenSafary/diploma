@@ -4,7 +4,6 @@ import (
 	"database/sql"
 	"diploma/auth-service/utils"
 	"log"
-	"strconv"
 )
 
 type Users struct {
@@ -50,29 +49,4 @@ func (d *Users) GiveToken(username, password string) (string, error) {
 	}
 
 	return token, nil
-}
-
-func (c *Users) CreateUser(username, password, firstname, lastname, email, sex, age string) (string, error) {
-	age_int, err := strconv.Atoi(age)
-	if err != nil {
-		return "", err
-	}
-
-	// making hashed password
-	hashedPass, err := utils.MakeHashed(password)
-	if err != nil {
-		return "", err
-	}
-
-	_, err = c.DB.Exec(
-		`INSERT INTO users (Username, Passwd, FirstName, LastName, Email, Sex, Age, Adm)
-         VALUES ($1,$2,$3,$4,$5,$6,$7,$8)`,
-		username, hashedPass, firstname, lastname, email, sex, age_int, false,
-	)
-	if err != nil {
-		log.Println("Error inserting user:", err)
-		return "", err
-	}
-
-	return "Hello, world!", nil
 }
