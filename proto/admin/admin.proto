@@ -1,0 +1,45 @@
+syntax = "proto3";
+
+package admin;
+
+option go_package = "diploma/proto/admin;adminpb";
+
+// Make or delete admin 
+message MakeAdminRequest {
+    int32 id = 1; // his id in db
+}
+
+message MakeAdminResponse {
+    bool status = 1;
+    string response = 2;
+}
+
+message DeleteAdminRequest {
+    int32 id = 1; 
+}
+
+message DeleteAdminResponse {
+    bool status = 1;
+    string response = 2;
+}
+//
+// Make employee
+message MakeEmployeeRequest {
+    int32 id = 1;
+}
+
+message MakeEmployeeResponse {
+    bool status = 1;
+    string response = 2;
+}
+
+// List of users
+//
+//
+//
+// future realization
+
+service AdminService {
+    rpc MakeAdmin(MakeAdminRequest) returns (MakeAdminResponse);
+    rpc MakeEmployee(MakeEmployeeRequest) returns (MakeEmployeeResponse);
+}
