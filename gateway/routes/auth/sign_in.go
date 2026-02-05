@@ -96,7 +96,7 @@ func PutToken(w http.ResponseWriter, r *http.Request) {
 		Name:     "user",
 		Value:    body.Token,
 		Path:     "/",
-		MaxAge:   3600,
+		MaxAge:   86400, // 24 hours
 		HttpOnly: true,
 		SameSite: http.SameSiteLaxMode,
 	})
