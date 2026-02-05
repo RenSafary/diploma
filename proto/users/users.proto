@@ -1,0 +1,44 @@
+syntax = "proto3";
+
+package users;
+
+option go_package = "diploma/proto/users;userspb";
+
+message GetUserRequest {
+    string username = 1;
+}
+
+enum Sex {
+    UNKNOWN = 0;
+    MALE = 1;
+    FEMALE = 2;
+}
+
+message GetUserResponse {
+    string email = 1;
+    string firstname = 2;
+    string lastname = 3;
+    int32 age = 4;
+    Sex sex = 5;
+    bool adm = 6;
+}
+
+message CreateUserRequest {
+  string username = 1;
+  string password = 2;
+  string firstname = 3;
+  string lastname = 4;
+  string email = 5;
+  Sex sex = 6;
+  string age = 7;
+}
+
+message CreateUserResponse {
+  bool status = 1;
+  int32 user_id = 2;
+}
+
+service UsersService {
+    rpc GetUser(GetUserRequest) returns (GetUserResponse);
+    rpc CreateUser(CreateUserRequest) returns (CreateUserResponse);
+}
