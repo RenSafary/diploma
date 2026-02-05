@@ -8,18 +8,18 @@ import (
 
 func AdminPanel(w http.ResponseWriter, r *http.Request) {
 	// Checking jwt token
-	if token, err := r.Cookie("user"); err == nil {
-		_, _, admin, err := utils.ParseToken(token.Value)
-		if err == nil {
-			if !admin {
-				http.Error(w, "Access forbidden. You're not an admin", http.StatusForbidden)
-				return
-			}
-			http.Redirect(w, r, "/adm", http.StatusTemporaryRedirect)
-			return
-		}
-	} else {
-		http.Error(w, "Access forbidden. You're not an admin", http.StatusForbidden)
+	token, err := r.Cookie("user")
+	if err != nil {
+		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+		return
+	}
+	_, _, admin, err := utils.ParseToken(token.Value)
+	if err != nil {
+		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+		return
+	}
+	if !admin {
+		http.Error(w, "Access is denied", http.StatusForbidden)
 		return
 	}
 
