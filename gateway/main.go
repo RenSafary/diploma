@@ -3,6 +3,7 @@ package main
 import (
 	"diploma/gateway/routes"
 	"diploma/gateway/routes/admin-panel"
+	roles "diploma/gateway/routes/admin-panel/roles/admins"
 	"diploma/gateway/routes/auth"
 	"log"
 	"net/http"
@@ -32,7 +33,7 @@ func main() {
 	// Admin panel
 	r.HandleFunc("/adm", admin.AdminPanel).Methods("GET", "POST")
 	// Make or delete admin
-	//r.HandleFunc("/adm/")
+	r.HandleFunc("/adm/make-admin-ws", roles.MakeAdminWS)
 
 	log.Println("Server is started on port :8080")
 	if err := http.ListenAndServe(":8080", r); err != nil {
