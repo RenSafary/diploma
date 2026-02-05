@@ -21,35 +21,44 @@ type User struct {
 	Id string `json:"id"`
 }
 
-func MakeAdmin(w http.ResponseWriter, r *http.Request) {
+func MakeAdminWS(w http.ResponseWriter, r *http.Request) {
 	ws, err := upgrader.Upgrade(w, r, nil)
 	if err != nil {
-		log.Println("Err with sign in ws: ", err)
+		log.Println("Err with MakeAdminWS: ", err)
 		return
 	}
 	defer ws.Close()
 
 	for {
 		var user User
-		if err := ws.ReadJSON(&user); err != nil {
-			log.Println("Error reading JSON:", err)
+		err := ws.ReadJSON(&user)
+		if err != nil {
+			if websocket.IsCloseError(err, websocket.CloseNormalClosure, websocket.CloseGoingAway) {
+				log.Println("WebSocket closed:", err)
+			} else {
+				log.Println("Error reading JSON:", err)
+			}
 			break
 		}
 
-		user_id, err := strconv.Atoi(user.Id) // str to int
+		userID, err := strconv.Atoi(user.Id)
 		if err != nil {
-			log.Println("Error converting string to int", err)
+			log.Println("Error converting string to int:", err)
 			continue
 		}
 
-		status, msg := grpc_admin.GRPC_Make_Admin(user_id)
+		status, msg := grpc_admin.GRPC_Make_Admin(userID)
 		resp := map[string]interface{}{
 			"status":   status,
 			"response": msg,
 		}
 
 		if err := ws.WriteJSON(resp); err != nil {
-			log.Println("Error writing JSON to ws:", err)
+			if websocket.IsCloseError(err, websocket.CloseNormalClosure, websocket.CloseGoingAway) {
+				log.Println("WebSocket closed while writing:", err)
+			} else {
+				log.Println("Error writing JSON to ws:", err)
+			}
 			break
 		}
 	}
