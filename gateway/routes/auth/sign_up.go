@@ -2,7 +2,7 @@ package auth
 
 import (
 	"diploma/auth-service/utils"
-	grpc_auth "diploma/gateway/grpc/auth"
+	grpc_auth "diploma/gateway/grpc/users"
 	"encoding/json"
 	"html/template"
 	"log"
@@ -61,7 +61,7 @@ func SignUpPost(w http.ResponseWriter, r *http.Request) {
 		sex = "Ж"
 	}
 
-	status, token := grpc_auth.GRPC_SignUp(username, password, firstname, lastname, email, sex, age)
+	status, userId := grpc_auth.GRPC_SignUp(username, password, firstname, lastname, email, sex, age)
 	if !status {
 		http.Error(w, "Couldn't sign up", http.StatusUnauthorized)
 		return
@@ -69,7 +69,7 @@ func SignUpPost(w http.ResponseWriter, r *http.Request) {
 
 	response := map[string]interface{}{
 		"status": status,
-		"token":  token,
+		"userId": userId,
 	}
 
 	json.NewEncoder(w).Encode(response)
