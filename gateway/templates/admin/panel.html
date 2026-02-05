@@ -1,11 +1,72 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin panel</title>
+    <meta charset="UTF-8" />
+    <title>Admin Panel</title>
+    <link rel="stylesheet" href="/static/css/admin/panel.css">
 </head>
 <body>
-    <H1>Hi!</H1>
+
+<!-- ===== HEADER ===== -->
+
+<header>
+    <div class="logo">⚙ Admin</div>
+
+    <nav>
+        <a onclick="show('users')">Список пользователей</a>
+        <a onclick="show('admins')">Админы</a>
+        <a onclick="show('workers')">Врачи</a>
+        <a onclick="show('history')">История</a>
+        <a onclick="show('schedule')">Расписание</a>
+    </nav>
+</header>
+
+<!-- ===== CONTENT ===== -->
+
+<div class="content">
+
+    <!-- USERS -->
+    <div id="users">
+        <h2>Список пользователей</h2>
+    </div>
+
+    <!-- ADMINS -->
+    <div id="admins" class="hidden">
+        <h2>Админы</h2>
+
+        <div class="row">
+            <div class="card">
+                <h3>Сделать админом</h3>
+                <input id="adminId" placeholder="User ID">
+                <button onclick="makeAdmin()">Назначить</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- WORKERS -->
+    <div id="workers" class="hidden">
+        <h2>Врачи / Работники</h2>
+
+        <div class="row">
+            <div class="card">
+                <h3>Сделать работником</h3>
+                <input id="workerId" placeholder="User ID">
+                <button onclick="makeWorker()">Назначить</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- HISTORY -->
+    <div id="history" class="hidden">
+        <h2>История записей и посещений</h2>
+    </div>
+
+    <!-- SCHEDULE -->
+    <div id="schedule" class="hidden">
+        <h2>Расписание</h2>
+    </div>
+
+</div>
+<script src="/static/js/admin/panel.js"></script>
 </body>
 </html>
