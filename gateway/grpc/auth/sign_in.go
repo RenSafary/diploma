@@ -22,7 +22,7 @@ func GRPC_SignIn(username, password string) (bool, string) {
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 
-	resp, err := client.SignIn(ctx, &authpb.SignInRequest{
+	resp, err := client.Login(ctx, &authpb.LoginRequest{
 		Username: username,
 		Password: password,
 	})
