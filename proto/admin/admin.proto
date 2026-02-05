@@ -41,5 +41,6 @@ message MakeEmployeeResponse {
 
 service AdminService {
     rpc MakeAdmin(MakeAdminRequest) returns (MakeAdminResponse);
+    rpc DeleteAdmin(DeleteAdminRequest) returns (DeleteAdminResponse);
     rpc MakeEmployee(MakeEmployeeRequest) returns (MakeEmployeeResponse);
 }

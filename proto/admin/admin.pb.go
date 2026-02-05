@@ -330,9 +330,10 @@ const file_proto_admin_admin_proto_rawDesc = "" +
 	"\x02id\x18\x01 \x01(\x05R\x02id\"J\n" +
 	"\x14MakeEmployeeResponse\x12\x16\n" +
 	"\x06status\x18\x01 \x01(\bR\x06status\x12\x1a\n" +
-	"\bresponse\x18\x02 \x01(\tR\bresponse2\x97\x01\n" +
+	"\bresponse\x18\x02 \x01(\tR\bresponse2\xdd\x01\n" +
 	"\fAdminService\x12>\n" +
-	"\tMakeAdmin\x12\x17.admin.MakeAdminRequest\x1a\x18.admin.MakeAdminResponse\x12G\n" +
+	"\tMakeAdmin\x12\x17.admin.MakeAdminRequest\x1a\x18.admin.MakeAdminResponse\x12D\n" +
+	"\vDeleteAdmin\x12\x19.admin.DeleteAdminRequest\x1a\x1a.admin.DeleteAdminResponse\x12G\n" +
 	"\fMakeEmployee\x12\x1a.admin.MakeEmployeeRequest\x1a\x1b.admin.MakeEmployeeResponseB\x1dZ\x1bdiploma/proto/admin;adminpbb\x06proto3"
 
 var (
@@ -358,11 +359,13 @@ var file_proto_admin_admin_proto_goTypes = []any{
 }
 var file_proto_admin_admin_proto_depIdxs = []int32{
 	0, // 0: admin.AdminService.MakeAdmin:input_type -> admin.MakeAdminRequest
-	4, // 1: admin.AdminService.MakeEmployee:input_type -> admin.MakeEmployeeRequest
-	1, // 2: admin.AdminService.MakeAdmin:output_type -> admin.MakeAdminResponse
-	5, // 3: admin.AdminService.MakeEmployee:output_type -> admin.MakeEmployeeResponse
-	2, // [2:4] is the sub-list for method output_type
-	0, // [0:2] is the sub-list for method input_type
+	2, // 1: admin.AdminService.DeleteAdmin:input_type -> admin.DeleteAdminRequest
+	4, // 2: admin.AdminService.MakeEmployee:input_type -> admin.MakeEmployeeRequest
+	1, // 3: admin.AdminService.MakeAdmin:output_type -> admin.MakeAdminResponse
+	3, // 4: admin.AdminService.DeleteAdmin:output_type -> admin.DeleteAdminResponse
+	5, // 5: admin.AdminService.MakeEmployee:output_type -> admin.MakeEmployeeResponse
+	3, // [3:6] is the sub-list for method output_type
+	0, // [0:3] is the sub-list for method input_type
 	0, // [0:0] is the sub-list for extension type_name
 	0, // [0:0] is the sub-list for extension extendee
 	0, // [0:0] is the sub-list for field type_name

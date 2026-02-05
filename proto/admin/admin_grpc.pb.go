@@ -20,6 +20,7 @@ const _ = grpc.SupportPackageIsVersion9
 
 const (
 	AdminService_MakeAdmin_FullMethodName    = "/admin.AdminService/MakeAdmin"
+	AdminService_DeleteAdmin_FullMethodName  = "/admin.AdminService/DeleteAdmin"
 	AdminService_MakeEmployee_FullMethodName = "/admin.AdminService/MakeEmployee"
 )
 
@@ -28,6 +29,7 @@ const (
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type AdminServiceClient interface {
 	MakeAdmin(ctx context.Context, in *MakeAdminRequest, opts ...grpc.CallOption) (*MakeAdminResponse, error)
+	DeleteAdmin(ctx context.Context, in *DeleteAdminRequest, opts ...grpc.CallOption) (*DeleteAdminResponse, error)
 	MakeEmployee(ctx context.Context, in *MakeEmployeeRequest, opts ...grpc.CallOption) (*MakeEmployeeResponse, error)
 }
 
@@ -49,6 +51,16 @@ func (c *adminServiceClient) MakeAdmin(ctx context.Context, in *MakeAdminRequest
 	return out, nil
 }
 
+func (c *adminServiceClient) DeleteAdmin(ctx context.Context, in *DeleteAdminRequest, opts ...grpc.CallOption) (*DeleteAdminResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(DeleteAdminResponse)
+	err := c.cc.Invoke(ctx, AdminService_DeleteAdmin_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *adminServiceClient) MakeEmployee(ctx context.Context, in *MakeEmployeeRequest, opts ...grpc.CallOption) (*MakeEmployeeResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(MakeEmployeeResponse)
@@ -64,6 +76,7 @@ func (c *adminServiceClient) MakeEmployee(ctx context.Context, in *MakeEmployeeR
 // for forward compatibility.
 type AdminServiceServer interface {
 	MakeAdmin(context.Context, *MakeAdminRequest) (*MakeAdminResponse, error)
+	DeleteAdmin(context.Context, *DeleteAdminRequest) (*DeleteAdminResponse, error)
 	MakeEmployee(context.Context, *MakeEmployeeRequest) (*MakeEmployeeResponse, error)
 	mustEmbedUnimplementedAdminServiceServer()
 }
@@ -77,6 +90,9 @@ type UnimplementedAdminServiceServer struct{}
 
 func (UnimplementedAdminServiceServer) MakeAdmin(context.Context, *MakeAdminRequest) (*MakeAdminResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "method MakeAdmin not implemented")
+}
+func (UnimplementedAdminServiceServer) DeleteAdmin(context.Context, *DeleteAdminRequest) (*DeleteAdminResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method DeleteAdmin not implemented")
 }
 func (UnimplementedAdminServiceServer) MakeEmployee(context.Context, *MakeEmployeeRequest) (*MakeEmployeeResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "method MakeEmployee not implemented")
@@ -120,6 +136,24 @@ func _AdminService_MakeAdmin_Handler(srv interface{}, ctx context.Context, dec f
 	return interceptor(ctx, in, info, handler)
 }
 
+func _AdminService_DeleteAdmin_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(DeleteAdminRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(AdminServiceServer).DeleteAdmin(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: AdminService_DeleteAdmin_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(AdminServiceServer).DeleteAdmin(ctx, req.(*DeleteAdminRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _AdminService_MakeEmployee_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(MakeEmployeeRequest)
 	if err := dec(in); err != nil {
@@ -148,6 +182,10 @@ var AdminService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "MakeAdmin",
 			Handler:    _AdminService_MakeAdmin_Handler,
+		},
+		{
+			MethodName: "DeleteAdmin",
+			Handler:    _AdminService_DeleteAdmin_Handler,
 		},
 		{
 			MethodName: "MakeEmployee",
