@@ -2,7 +2,7 @@ package auth
 
 import (
 	"diploma/auth-service/utils"
-	grpc_auth "diploma/gateway/grpc/users"
+	grpc_auth "diploma/gateway/grpc/auth"
 	"encoding/json"
 	"html/template"
 	"log"
