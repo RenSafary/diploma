@@ -23,6 +23,22 @@ message GetUserResponse {
     bool adm = 6;
 }
 
+message User {
+    string email = 1;
+    string firstname = 2;
+    string lastname = 3;
+    int32 age = 4;
+    Sex sex = 5;
+    bool adm = 6;
+}
+
+message GetAllUsersRequest {
+}
+
+message GetAllUsersResponse {
+    repeated User users = 1;
+}
+
 message CreateUserRequest {
   string username = 1;
   string password = 2;
@@ -40,5 +56,6 @@ message CreateUserResponse {
 
 service UsersService {
     rpc GetUser(GetUserRequest) returns (GetUserResponse);
+    rpc GetAllUsers(GetAllUsersRequest) returns (GetAllUsersResponse);
     rpc CreateUser(CreateUserRequest) returns (CreateUserResponse);
 }
