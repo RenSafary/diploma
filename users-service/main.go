@@ -15,23 +15,33 @@ type UsersService struct {
 	DB *db.ClinicDB
 }
 
-func (s *UsersService) CreateUser(ctx context.Context, req *userspb.CreateUserRequest) (*userspb.CreateUserResponse, error) {
-	var sex string
-	switch req.Sex {
+func Sex(s userspb.Sex) string {
+	switch s {
 	case userspb.Sex_MALE:
-		sex = "М"
+		return "М"
 	case userspb.Sex_FEMALE:
-		sex = "Ж"
+		return "Ж"
 	default:
-		sex = "UNKNOWN"
+		return "UNKNOWN"
 	}
+}
 
+func (s *UsersService) CreateUser(ctx context.Context, req *userspb.CreateUserRequest) (*userspb.CreateUserResponse, error) {
+	sex := Sex(req.Sex)
 	userId, err := s.DB.Users.CreateUser(req.Username, req.Password, req.Firstname, req.Lastname, req.Email, sex, req.Age)
 	if err != nil {
 		return &userspb.CreateUserResponse{Status: false, UserId: 0}, nil
 	}
 
 	return &userspb.CreateUserResponse{Status: true, UserId: userId}, nil
+}
+
+func (s *UsersService) GetAllUsers(ctx context.Context, req *userspb.GetAllUsersRequest) (*userspb.GetAllUsersResponse, error) {
+	users, err := s.DB.Users.GetAllUsers()
+	if err != nil {
+		return &userspb.GetAllUsersResponse{Users: nil}, err
+	}
+	return &userspb.GetAllUsersResponse{Users: users}, nil
 }
 
 func main() {
