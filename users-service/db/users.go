@@ -3,6 +3,7 @@ package db
 import (
 	"database/sql"
 	"diploma/auth-service/utils"
+	userspb "diploma/proto/users"
 	"log"
 	"strconv"
 )
@@ -50,4 +51,50 @@ func (c *Users) CreateUser(username, password, firstname, lastname, email, sex, 
 	}
 
 	return userId, nil
+}
+
+func (r *Users) GetAllUsers() ([]*userspb.User, error) {
+	rows, err := r.DB.Query("SELECT email, firstname, lastname, age, sex, adm FROM users")
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	users := make([]*userspb.User, 0)
+
+	for rows.Next() {
+		var email, firstname, lastname, sexStr string
+		var age int32
+		var admBool bool
+
+		err := rows.Scan(&email, &firstname, &lastname, &age, &sexStr, &admBool)
+		if err != nil {
+			log.Println("Error scanning row:", err)
+			continue
+		}
+
+		var sex userspb.Sex
+		switch sexStr {
+		case "MALE", "М":
+			sex = userspb.Sex_MALE
+		case "FEMALE", "Ж":
+			sex = userspb.Sex_FEMALE
+		default:
+			sex = userspb.Sex_UNKNOWN
+		}
+
+		u := &userspb.User{
+			Email:     email,
+			Firstname: firstname,
+			Lastname:  lastname,
+			Age:       age,
+			Sex:       sex,
+			Adm:       admBool,
+		}
+
+		users = append(users, u)
+	}
+
+	log.Println("Found users:", len(users))
+	return users, nil
 }
