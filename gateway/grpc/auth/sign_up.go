@@ -12,7 +12,7 @@ import (
 func GRPC_SignUp(username, password, firstname, lastname, email, sex, age string) (bool, int32) {
 	conn, err := grpc.Dial("users:50053", grpc.WithInsecure())
 	if err != nil {
-		log.Println("Couldn't connect to gRPC auth server", err)
+		log.Println("Couldn't connect to gRPC users server", err)
 		return false, 0
 	}
 	defer conn.Close()
