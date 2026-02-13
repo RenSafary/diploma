@@ -3,36 +3,7 @@
 <head>
     <meta charset="UTF-8" />
     <title>Пользователи</title>
-
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            padding: 30px;
-        }
-
-        h2 {
-            margin-bottom: 20px;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-
-        th, td {
-            border: 1px solid #ddd;
-            padding: 10px;
-            text-align: left;
-        }
-
-        th {
-            background-color: #f2f2f2;
-        }
-
-        tr:nth-child(even) {
-            background-color: #fafafa;
-        }
-    </style>
+    <link rel="stylesheet" href="/static/css/admin/roles/users/GetAllUsers.css">
 </head>
 <body>
 
@@ -47,22 +18,49 @@
             <th>Возраст</th>
             <th>Пол</th>
             <th>Админ</th>
+            <th>Действия</th>
         </tr>
     </thead>
 
     <tbody>
         {{ range .Users }}
         <tr>
+            <td>{{ .Id }}</td>
             <td>{{ .Email }}</td>
             <td>{{ .Firstname }}</td>
             <td>{{ .Lastname }}</td>
             <td>{{ .Age }}</td>
             <td>{{ .Sex }}</td>
             <td>{{ if .Adm }}Да{{ else }}Нет{{ end }}</td>
+
+            <td>
+                <form method="POST" action="/adm/users">
+                    <input type="hidden" name="id" value="{{ .Id }}">
+
+                    <div class="actions">
+                        {{ if not .Adm }}
+                        <button class="green" name="action" value="make_admin">
+                            Сделать админом
+                        </button>
+                        {{ else }}
+                        <button class="orange" name="action" value="remove_admin">
+                            Убрать админа
+                        </button>
+                        {{ end }}
+
+                        <button class="red" name="action" value="delete">
+                            Удалить
+                        </button>
+                        <button class="blue" name="action" value="history">
+                            История
+                        </button>
+                    </div>
+                </form>
+            </td>
         </tr>
         {{ else }}
         <tr>
-            <td colspan="6">Нет пользователей</td>
+            <td colspan="7">Нет пользователей</td>
         </tr>
         {{ end }}
     </tbody>
