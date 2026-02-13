@@ -4,6 +4,7 @@ import (
 	grpc_users "diploma/gateway/grpc/users"
 	userspb "diploma/proto/users"
 	"html/template"
+	"log"
 	"net/http"
 )
 
@@ -44,7 +45,20 @@ func GetAllUsers(w http.ResponseWriter, r *http.Request) {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 		}
 	case http.MethodPost:
-		return
+		email := r.FormValue("email")
+		action := r.FormValue("action")
+		log.Println(email)
+
+		switch action {
+		case "make_admin":
+			return
+		case "remove_admin":
+			return
+		case "delete":
+			return
+		case "history":
+			return
+		}
 	default:
 		http.Error(w, "method not allowed", http.StatusMethodNotAllowed)
 	}
