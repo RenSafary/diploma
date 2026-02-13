@@ -25,7 +25,6 @@
     <tbody>
         {{ range .Users }}
         <tr>
-            <td>{{ .Id }}</td>
             <td>{{ .Email }}</td>
             <td>{{ .Firstname }}</td>
             <td>{{ .Lastname }}</td>
@@ -35,7 +34,7 @@
 
             <td>
                 <form method="POST" action="/adm/users">
-                    <input type="hidden" name="id" value="{{ .Id }}">
+                    <input type="hidden" name="email" value="{{ .Email }}">
 
                     <div class="actions">
                         {{ if not .Adm }}
