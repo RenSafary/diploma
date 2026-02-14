@@ -45,12 +45,13 @@ func GetAllUsers(w http.ResponseWriter, r *http.Request) {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 		}
 	case http.MethodPost:
-		email := r.FormValue("email")
+		id := r.FormValue("id")
 		action := r.FormValue("action")
-		log.Println(email)
+		log.Println(id)
 
 		switch action {
 		case "make_admin":
+
 			return
 		case "remove_admin":
 			return
