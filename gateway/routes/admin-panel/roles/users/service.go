@@ -1,11 +1,12 @@
 package roles
 
 import (
+	grpc_admin "diploma/gateway/grpc/admin"
 	grpc_users "diploma/gateway/grpc/users"
 	userspb "diploma/proto/users"
 	"html/template"
-	"log"
 	"net/http"
+	"strconv"
 )
 
 type PageData struct {
@@ -47,13 +48,33 @@ func GetAllUsers(w http.ResponseWriter, r *http.Request) {
 	case http.MethodPost:
 		id := r.FormValue("id")
 		action := r.FormValue("action")
-		log.Println(id)
 
 		switch action {
 		case "make_admin":
-
+			u_id, err := strconv.Atoi(id)
+			if err != nil {
+				http.Error(w, "Couldn't convert data", http.StatusInternalServerError)
+				return
+			}
+			status, response := grpc_admin.GRPC_MAKE_Admin(u_id)
+			if !status {
+				http.Error(w, response, http.StatusBadRequest)
+				return
+			}
+			http.Redirect(w, r, "/adm/users", http.StatusSeeOther)
 			return
 		case "remove_admin":
+			u_id, err := strconv.Atoi(id)
+			if err != nil {
+				http.Error(w, "Couldn't convert data", http.StatusInternalServerError)
+				return
+			}
+			status, response := grpc_admin.GRPC_DELETE_Admin(u_id)
+			if !status {
+				http.Error(w, response, http.StatusBadRequest)
+				return
+			}
+			http.Redirect(w, r, "/adm/users", http.StatusSeeOther)
 			return
 		case "delete":
 			return
@@ -63,5 +84,4 @@ func GetAllUsers(w http.ResponseWriter, r *http.Request) {
 	default:
 		http.Error(w, "method not allowed", http.StatusMethodNotAllowed)
 	}
-
 }
