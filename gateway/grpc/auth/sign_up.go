@@ -22,17 +22,16 @@ func GRPC_SignUp(username, password, firstname, lastname, email, sex, age string
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 
-	// string to enum like in proto
+	// string to enum as in proto
 	var sexEnum userspb.Sex
 	switch sex {
-	case "М":
+	case "M":
 		sexEnum = userspb.Sex_MALE
-	case "Ж":
+	case "F":
 		sexEnum = userspb.Sex_FEMALE
 	default:
 		sexEnum = userspb.Sex_UNKNOWN
 	}
-
 	resp, err := client.CreateUser(ctx, &userspb.CreateUserRequest{
 		Username:  username,
 		Password:  password,
