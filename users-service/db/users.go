@@ -54,7 +54,7 @@ func (c *Users) CreateUser(username, password, firstname, lastname, email, sex, 
 }
 
 func (r *Users) GetAllUsers() ([]*userspb.User, error) {
-	rows, err := r.DB.Query("SELECT email, firstname, lastname, age, sex, adm FROM users")
+	rows, err := r.DB.Query("SELECT id, email, firstname, lastname, age, sex, adm FROM users")
 	if err != nil {
 		return nil, err
 	}
@@ -63,11 +63,12 @@ func (r *Users) GetAllUsers() ([]*userspb.User, error) {
 	users := make([]*userspb.User, 0)
 
 	for rows.Next() {
+		var id int
 		var email, firstname, lastname, sexStr string
 		var age int32
 		var admBool bool
 
-		err := rows.Scan(&email, &firstname, &lastname, &age, &sexStr, &admBool)
+		err := rows.Scan(&id, &email, &firstname, &lastname, &age, &sexStr, &admBool)
 		if err != nil {
 			log.Println("Error scanning row:", err)
 			continue
@@ -84,6 +85,7 @@ func (r *Users) GetAllUsers() ([]*userspb.User, error) {
 		}
 
 		u := &userspb.User{
+			Id:        int32(id),
 			Email:     email,
 			Firstname: firstname,
 			Lastname:  lastname,
