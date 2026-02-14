@@ -31,7 +31,13 @@
             <td>{{ .Firstname }}</td>
             <td>{{ .Lastname }}</td>
             <td>{{ .Age }}</td>
-            <td>{{ .Sex }}</td>
+            <td>
+                {{ if eq (.Sex.String) "MALE" }}
+                    Мужской
+                {{ else }}
+                    Женский
+                {{ end }}
+            </td>  
             <td>{{ if .Adm }}Да{{ else }}Нет{{ end }}</td>
 
             <td>
