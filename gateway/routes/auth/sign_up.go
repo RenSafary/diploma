@@ -55,12 +55,6 @@ func SignUpPost(w http.ResponseWriter, r *http.Request) {
 	age := r.FormValue("age")
 	sex := r.FormValue("sex")
 
-	if sex == "Мужской" {
-		sex = "М"
-	} else {
-		sex = "Ж"
-	}
-
 	status, userId := grpc_auth.GRPC_SignUp(username, password, firstname, lastname, email, sex, age)
 	if !status {
 		http.Error(w, "Couldn't sign up", http.StatusUnauthorized)
