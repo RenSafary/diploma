@@ -96,7 +96,5 @@ func (r *Users) GetAllUsers() ([]*userspb.User, error) {
 
 		users = append(users, u)
 	}
-
-	log.Println("Found users:", len(users))
 	return users, nil
 }
