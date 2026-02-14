@@ -200,12 +200,13 @@ func (x *GetUserResponse) GetAdm() bool {
 
 type User struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Email         string                 `protobuf:"bytes,1,opt,name=email,proto3" json:"email,omitempty"`
-	Firstname     string                 `protobuf:"bytes,2,opt,name=firstname,proto3" json:"firstname,omitempty"`
-	Lastname      string                 `protobuf:"bytes,3,opt,name=lastname,proto3" json:"lastname,omitempty"`
-	Age           int32                  `protobuf:"varint,4,opt,name=age,proto3" json:"age,omitempty"`
-	Sex           Sex                    `protobuf:"varint,5,opt,name=sex,proto3,enum=users.Sex" json:"sex,omitempty"`
-	Adm           bool                   `protobuf:"varint,6,opt,name=adm,proto3" json:"adm,omitempty"`
+	Id            int32                  `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
+	Email         string                 `protobuf:"bytes,2,opt,name=email,proto3" json:"email,omitempty"`
+	Firstname     string                 `protobuf:"bytes,3,opt,name=firstname,proto3" json:"firstname,omitempty"`
+	Lastname      string                 `protobuf:"bytes,4,opt,name=lastname,proto3" json:"lastname,omitempty"`
+	Age           int32                  `protobuf:"varint,5,opt,name=age,proto3" json:"age,omitempty"`
+	Sex           Sex                    `protobuf:"varint,6,opt,name=sex,proto3,enum=users.Sex" json:"sex,omitempty"`
+	Adm           bool                   `protobuf:"varint,7,opt,name=adm,proto3" json:"adm,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -238,6 +239,13 @@ func (x *User) ProtoReflect() protoreflect.Message {
 // Deprecated: Use User.ProtoReflect.Descriptor instead.
 func (*User) Descriptor() ([]byte, []int) {
 	return file_proto_users_users_proto_rawDescGZIP(), []int{2}
+}
+
+func (x *User) GetId() int32 {
+	if x != nil {
+		return x.Id
+	}
+	return 0
 }
 
 func (x *User) GetEmail() string {
@@ -520,15 +528,16 @@ const file_proto_users_users_proto_rawDesc = "" +
 	"\x03age\x18\x04 \x01(\x05R\x03age\x12\x1c\n" +
 	"\x03sex\x18\x05 \x01(\x0e2\n" +
 	".users.SexR\x03sex\x12\x10\n" +
-	"\x03adm\x18\x06 \x01(\bR\x03adm\"\x98\x01\n" +
-	"\x04User\x12\x14\n" +
-	"\x05email\x18\x01 \x01(\tR\x05email\x12\x1c\n" +
-	"\tfirstname\x18\x02 \x01(\tR\tfirstname\x12\x1a\n" +
-	"\blastname\x18\x03 \x01(\tR\blastname\x12\x10\n" +
-	"\x03age\x18\x04 \x01(\x05R\x03age\x12\x1c\n" +
-	"\x03sex\x18\x05 \x01(\x0e2\n" +
+	"\x03adm\x18\x06 \x01(\bR\x03adm\"\xa8\x01\n" +
+	"\x04User\x12\x0e\n" +
+	"\x02id\x18\x01 \x01(\x05R\x02id\x12\x14\n" +
+	"\x05email\x18\x02 \x01(\tR\x05email\x12\x1c\n" +
+	"\tfirstname\x18\x03 \x01(\tR\tfirstname\x12\x1a\n" +
+	"\blastname\x18\x04 \x01(\tR\blastname\x12\x10\n" +
+	"\x03age\x18\x05 \x01(\x05R\x03age\x12\x1c\n" +
+	"\x03sex\x18\x06 \x01(\x0e2\n" +
 	".users.SexR\x03sex\x12\x10\n" +
-	"\x03adm\x18\x06 \x01(\bR\x03adm\"\x14\n" +
+	"\x03adm\x18\a \x01(\bR\x03adm\"\x14\n" +
 	"\x12GetAllUsersRequest\"8\n" +
 	"\x13GetAllUsersResponse\x12!\n" +
 	"\x05users\x18\x01 \x03(\v2\v.users.UserR\x05users\"\xcb\x01\n" +

@@ -24,12 +24,13 @@ message GetUserResponse {
 }
 
 message User {
-    string email = 1;
-    string firstname = 2;
-    string lastname = 3;
-    int32 age = 4;
-    Sex sex = 5;
-    bool adm = 6;
+    int32 id = 1;
+    string email = 2;
+    string firstname = 3;
+    string lastname = 4;
+    int32 age = 5;
+    Sex sex = 6;
+    bool adm = 7;
 }
 
 message GetAllUsersRequest {
