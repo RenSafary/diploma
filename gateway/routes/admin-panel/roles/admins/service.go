@@ -47,7 +47,7 @@ func MakeAdminWS(w http.ResponseWriter, r *http.Request) {
 			continue
 		}
 
-		status, msg := grpc_admin.GRPC_Make_Admin(userID)
+		status, msg := grpc_admin.GRPC_MAKE_Admin(userID)
 		resp := map[string]interface{}{
 			"status":   status,
 			"response": msg,
