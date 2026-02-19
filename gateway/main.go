@@ -25,11 +25,13 @@ func main() {
 	// Authorization
 	r.HandleFunc("/sign-in", auth.SignInForm).Methods("GET")
 	r.HandleFunc("/sign-in-ws", auth.SignInWS)
-	r.HandleFunc("/sign-in/put-token", auth.PutToken).Methods("POST")
 
 	// Registration
 	r.HandleFunc("/sign-up", auth.SignUpForm).Methods("GET")
-	r.HandleFunc("/sign-up", auth.SignUpPost).Methods("POST")
+	r.HandleFunc("/sign-up-ws", auth.SignUpWS)
+
+	// JWT
+	r.HandleFunc("/put-token", auth.PutToken).Methods("POST")
 
 	// ADMIN PANEL
 	r.HandleFunc("/adm", admin.AdminPanel).Methods("GET", "POST")
