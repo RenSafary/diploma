@@ -3,21 +3,10 @@ package auth
 import (
 	"diploma/auth-service/utils"
 	grpc_auth "diploma/gateway/grpc/auth"
-	"encoding/json"
 	"html/template"
 	"log"
 	"net/http"
-
-	"github.com/gorilla/websocket"
 )
-
-var upgrader = websocket.Upgrader{
-	ReadBufferSize:  1024,
-	WriteBufferSize: 1024,
-	CheckOrigin: func(r *http.Request) bool {
-		return true
-	},
-}
 
 type Client struct {
 	Username string `json:"username"`
@@ -46,7 +35,7 @@ func SignInForm(w http.ResponseWriter, r *http.Request) {
 }
 
 func SignInWS(w http.ResponseWriter, r *http.Request) {
-	ws, err := upgrader.Upgrade(w, r, nil)
+	ws, err := Upgrader.Upgrade(w, r, nil)
 	if err != nil {
 		log.Println("Err with sign in ws: ", err)
 		return
@@ -71,35 +60,4 @@ func SignInWS(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 	}
-}
-
-func PutToken(w http.ResponseWriter, r *http.Request) {
-	// Checking jwt token
-	if token, err := r.Cookie("user"); err == nil {
-		_, _, _, err = utils.ParseToken(token.Value)
-		if err == nil {
-			http.Redirect(w, r, "/", http.StatusTemporaryRedirect)
-			return
-		}
-	}
-
-	var body struct {
-		Token string `json:"token"`
-	}
-
-	if err := json.NewDecoder(r.Body).Decode(&body); err != nil {
-		http.Error(w, "Invalid request", http.StatusBadRequest)
-		return
-	}
-
-	http.SetCookie(w, &http.Cookie{
-		Name:     "user",
-		Value:    body.Token,
-		Path:     "/",
-		MaxAge:   86400, // 24 hours
-		HttpOnly: true,
-		SameSite: http.SameSiteLaxMode,
-	})
-
-	w.WriteHeader(http.StatusOK)
 }
