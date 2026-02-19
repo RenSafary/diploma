@@ -28,12 +28,15 @@ func Sex(s userspb.Sex) string {
 
 func (s *UsersService) CreateUser(ctx context.Context, req *userspb.CreateUserRequest) (*userspb.CreateUserResponse, error) {
 	sex := Sex(req.Sex)
-	userId, err := s.DB.Users.CreateUser(req.Username, req.Password, req.Firstname, req.Lastname, req.Email, sex, req.Age)
+	_, err := s.DB.Users.CreateUser(req.Username, req.Password, req.Firstname, req.Lastname, req.Email, sex, req.Age)
 	if err != nil {
-		return &userspb.CreateUserResponse{Status: false, UserId: 0}, nil
+		return &userspb.CreateUserResponse{Status: false, Token: ""}, nil
 	}
 
-	return &userspb.CreateUserResponse{Status: true, UserId: userId}, nil
+	// giving token
+	token, err := s.DB.Users.GiveToken(req.Username, req.Password)
+
+	return &userspb.CreateUserResponse{Status: true, Token: token}, nil
 }
 
 func (s *UsersService) GetAllUsers(ctx context.Context, req *userspb.GetAllUsersRequest) (*userspb.GetAllUsersResponse, error) {
