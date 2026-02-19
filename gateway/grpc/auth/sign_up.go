@@ -9,11 +9,11 @@ import (
 	"google.golang.org/grpc"
 )
 
-func GRPC_SignUp(username, password, firstname, lastname, email, sex, age string) (bool, int32) {
+func GRPC_SignUp(username, password, firstname, lastname, email, sex, age string) (bool, string) {
 	conn, err := grpc.Dial("users:50053", grpc.WithInsecure())
 	if err != nil {
 		log.Println("Couldn't connect to gRPC users server", err)
-		return false, 0
+		return false, ""
 	}
 	defer conn.Close()
 
@@ -44,8 +44,8 @@ func GRPC_SignUp(username, password, firstname, lastname, email, sex, age string
 
 	if err != nil {
 		log.Println("Couldn't connect to gRPC server", err)
-		return false, 0
+		return false, ""
 	}
 
-	return resp.Status, resp.UserId
+	return resp.Status, resp.Token
 }
