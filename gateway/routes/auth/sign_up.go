@@ -3,11 +3,20 @@ package auth
 import (
 	"diploma/auth-service/utils"
 	grpc_auth "diploma/gateway/grpc/auth"
-	"encoding/json"
 	"html/template"
 	"log"
 	"net/http"
 )
+
+type User struct {
+	Username  string `json:"username"`
+	Password  string `json:"password"`
+	Firstname string `json:"firstname"`
+	Lastname  string `json:"lastname"`
+	Email     string `json:"email"`
+	Age       string `json:"age"`
+	Sex       string `json:"sex"`
+}
 
 func SignUpForm(w http.ResponseWriter, r *http.Request) {
 	// Checking jwt token
@@ -30,7 +39,7 @@ func SignUpForm(w http.ResponseWriter, r *http.Request) {
 	tmpl.Execute(w, nil)
 }
 
-func SignUpPost(w http.ResponseWriter, r *http.Request) {
+func SignUpWS(w http.ResponseWriter, r *http.Request) {
 	// Checking jwt token
 	if token, err := r.Cookie("user"); err == nil {
 		_, _, _, err = utils.ParseToken(token.Value)
@@ -40,31 +49,33 @@ func SignUpPost(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 
-	w.Header().Set("Content-Type", "application/json")
-
-	if err := r.ParseForm(); err != nil {
-		http.Error(w, "Unable to parse form", http.StatusBadRequest)
+	ws, err := Upgrader.Upgrade(w, r, nil)
+	if err != nil {
+		log.Println("Err with sign up ws: ", err)
 		return
 	}
+	defer ws.Close()
 
-	username := r.FormValue("username")
-	password := r.FormValue("password")
-	firstname := r.FormValue("firstname")
-	lastname := r.FormValue("lastname")
-	email := r.FormValue("email")
-	age := r.FormValue("age")
-	sex := r.FormValue("sex")
+	for {
+		var user User
+		if err := ws.ReadJSON(&user); err != nil {
+			log.Println("Error reading JSON: ", err)
+			return
+		}
 
-	status, userId := grpc_auth.GRPC_SignUp(username, password, firstname, lastname, email, sex, age)
-	if !status {
-		http.Error(w, "Couldn't sign up", http.StatusUnauthorized)
-		return
+		status, userId := grpc_auth.GRPC_SignUp(user.Username, user.Password, user.Firstname, user.Lastname, user.Email, user.Sex, user.Age)
+		if !status {
+			http.Error(w, "Couldn't sign up", http.StatusUnauthorized)
+			return
+		}
+		resp := map[string]interface{}{
+			"status": status,
+			"token":  userId,
+		}
+
+		if err := ws.WriteJSON(resp); err != nil {
+			log.Println("Error writing JSON to ws:", err)
+			return
+		}
 	}
-
-	response := map[string]interface{}{
-		"status": status,
-		"userId": userId,
-	}
-
-	json.NewEncoder(w).Encode(response)
 }
