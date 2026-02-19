@@ -1,2 +1,2 @@
-- take JWT token back when i make admin
-- ws for sign up
+- take JWT token back when i make or delete admin/user
+- check email and username when you sign up
