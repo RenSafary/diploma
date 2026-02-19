@@ -10,7 +10,7 @@ document.addEventListener("DOMContentLoaded", () => {
         if (data.status) {
             alert("Вход успешен!");
 
-            fetch("/sign-in/put-token", {
+            fetch("/put-token", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ token: data.token })
