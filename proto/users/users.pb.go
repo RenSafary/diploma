@@ -465,7 +465,7 @@ func (x *CreateUserRequest) GetAge() string {
 type CreateUserResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Status        bool                   `protobuf:"varint,1,opt,name=status,proto3" json:"status,omitempty"`
-	UserId        int32                  `protobuf:"varint,2,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
+	Token         string                 `protobuf:"bytes,2,opt,name=token,proto3" json:"token,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -507,11 +507,11 @@ func (x *CreateUserResponse) GetStatus() bool {
 	return false
 }
 
-func (x *CreateUserResponse) GetUserId() int32 {
+func (x *CreateUserResponse) GetToken() string {
 	if x != nil {
-		return x.UserId
+		return x.Token
 	}
-	return 0
+	return ""
 }
 
 var File_proto_users_users_proto protoreflect.FileDescriptor
@@ -549,10 +549,10 @@ const file_proto_users_users_proto_rawDesc = "" +
 	"\x05email\x18\x05 \x01(\tR\x05email\x12\x1c\n" +
 	"\x03sex\x18\x06 \x01(\x0e2\n" +
 	".users.SexR\x03sex\x12\x10\n" +
-	"\x03age\x18\a \x01(\tR\x03age\"E\n" +
+	"\x03age\x18\a \x01(\tR\x03age\"B\n" +
 	"\x12CreateUserResponse\x12\x16\n" +
-	"\x06status\x18\x01 \x01(\bR\x06status\x12\x17\n" +
-	"\auser_id\x18\x02 \x01(\x05R\x06userId*(\n" +
+	"\x06status\x18\x01 \x01(\bR\x06status\x12\x14\n" +
+	"\x05token\x18\x02 \x01(\tR\x05token*(\n" +
 	"\x03Sex\x12\v\n" +
 	"\aUNKNOWN\x10\x00\x12\b\n" +
 	"\x04MALE\x10\x01\x12\n" +
