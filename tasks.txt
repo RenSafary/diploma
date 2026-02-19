@@ -1,1 +1,2 @@
 - take JWT token back when i make admin
+- ws for sign up
