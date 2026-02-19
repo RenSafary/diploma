@@ -63,14 +63,14 @@ func SignUpWS(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
-		status, userId := grpc_auth.GRPC_SignUp(user.Username, user.Password, user.Firstname, user.Lastname, user.Email, user.Sex, user.Age)
-		if !status {
-			http.Error(w, "Couldn't sign up", http.StatusUnauthorized)
-			return
-		}
+		status, token := grpc_auth.GRPC_SignUp(user.Username, user.Password, user.Firstname, user.Lastname, user.Email, user.Sex, user.Age)
 		resp := map[string]interface{}{
 			"status": status,
-			"token":  userId,
+		}
+		if status {
+			resp["token"] = token
+		} else {
+			resp["error"] = "Coulnd't sign up"
 		}
 
 		if err := ws.WriteJSON(resp); err != nil {
