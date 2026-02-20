@@ -1,11 +1,190 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Main</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Поликлиника</title>
+<style>
+    /* Сброс стилей */
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: Arial, sans-serif; }
+
+    body { line-height: 1.6; color: #333; }
+
+    header {
+        background: #2C7BE5;
+        color: white;
+        padding: 20px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+    }
+
+    header .logo { font-size: 24px; font-weight: bold; }
+
+    nav a {
+        color: white;
+        text-decoration: none;
+        margin-left: 20px;
+        font-weight: bold;
+    }
+
+    .btn {
+        background: #FF6B6B;
+        color: white;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        text-decoration: none;
+        font-weight: bold;
+        transition: background 0.3s;
+    }
+
+    .btn:hover { background: #FF4C4C; }
+
+    .hero {
+        background: url('https://images.unsplash.com/photo-1588776814546-27a0f38a1a1d?auto=format&fit=crop&w=1400&q=80') center/cover no-repeat;
+        color: white;
+        text-align: center;
+        padding: 120px 20px;
+    }
+
+    .hero h1 { font-size: 48px; margin-bottom: 20px; }
+
+    .section {
+        padding: 60px 20px;
+        max-width: 1200px;
+        margin: auto;
+    }
+
+    .section h2 { text-align: center; margin-bottom: 40px; color: #2C7BE5; }
+
+    .services, .doctors, .reviews {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 20px;
+        justify-content: center;
+    }
+
+    .card {
+        background: #f7f7f7;
+        border-radius: 10px;
+        padding: 20px;
+        flex: 1 1 250px;
+        max-width: 300px;
+        text-align: center;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+
+    .card img { width: 100%; border-radius: 10px; }
+
+    footer {
+        background: #2C7BE5;
+        color: white;
+        text-align: center;
+        padding: 20px;
+    }
+
+    footer a { color: white; text-decoration: none; margin: 0 10px; }
+
+    /* Адаптив */
+    @media(max-width: 768px){
+        header { flex-direction: column; }
+        nav { margin-top: 10px; }
+        .hero h1 { font-size: 32px; }
+    }
+</style>
 </head>
 <body>
-    <h1>Hi</h>
+
+<header>
+    <div class="logo">Поликлиника №1</div>
+    <nav>
+        <a href="#">Главная</a>
+        <a href="#">О поликлинике</a>
+        <a href="#">Услуги</a>
+        <a href="#">Врачи</a>
+        <a href="#">Контакты</a>
+        <a href="#" class="btn">Записаться на приём</a>
+    </nav>
+</header>
+
+<section class="hero">
+    <h1>Заботимся о вашем здоровье!</h1>
+    <a href="#" class="btn">Записаться на приём</a>
+</section>
+
+<section class="section" id="about">
+    <h2>О поликлинике</h2>
+    <p style="text-align:center; max-width:800px; margin:auto;">
+        Наша поликлиника предоставляет качественные медицинские услуги для всей семьи. Современное оборудование, опытные врачи и внимательный персонал заботятся о вашем здоровье.
+    </p>
+</section>
+
+<section class="section" id="services">
+    <h2>Услуги</h2>
+    <div class="services">
+        <div class="card">
+            <h3>Терапия</h3>
+            <p>Диагностика и лечение заболеваний внутренних органов.</p>
+        </div>
+        <div class="card">
+            <h3>Педиатрия</h3>
+            <p>Забота о здоровье детей любого возраста.</p>
+        </div>
+        <div class="card">
+            <h3>Стоматология</h3>
+            <p>Профессиональная помощь и профилактика зубов.</p>
+        </div>
+        <div class="card">
+            <h3>Лаборатория</h3>
+            <p>Современные анализы с быстрыми результатами.</p>
+        </div>
+    </div>
+</section>
+
+<section class="section" id="doctors">
+    <h2>Наши врачи</h2>
+    <div class="doctors">
+        <div class="card">
+            <img src="https://images.unsplash.com/photo-1603415526960-f54e6a56e0eb?auto=format&fit=crop&w=400&q=80" alt="Врач">
+            <h3>Иван Иванов</h3>
+            <p>Терапевт</p>
+        </div>
+        <div class="card">
+            <img src="https://images.unsplash.com/photo-1595152772835-219674b2a8a0?auto=format&fit=crop&w=400&q=80" alt="Врач">
+            <h3>Анна Петрова</h3>
+            <p>Педиатр</p>
+        </div>
+    </div>
+</section>
+
+<section class="section" id="reviews">
+    <h2>Отзывы пациентов</h2>
+    <div class="reviews">
+        <div class="card">
+            <p>"Очень внимательный персонал и квалифицированные врачи. Рекомендую!"</p>
+            <strong>- Мария С.</strong>
+        </div>
+        <div class="card">
+            <p>"Быстро записали на приём, всё прошло отлично!"</p>
+            <strong>- Алексей К.</strong>
+        </div>
+    </div>
+</section>
+
+<section class="section" id="contacts">
+    <h2>Контакты</h2>
+    <p style="text-align:center;">Адрес: г. Москва, ул. Здоровья, 10 | Тел: +7 (999) 123-45-67 | Email: info@clinic.ru</p>
+</section>
+
+<footer>
+    &copy; 2026 Поликлиника №1 | 
+    <a href="#">Главная</a> | 
+    <a href="#">О поликлинике</a> | 
+    <a href="#">Контакты</a>
+</footer>
+
 </body>
 </html>
