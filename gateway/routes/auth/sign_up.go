@@ -70,7 +70,7 @@ func SignUpWS(w http.ResponseWriter, r *http.Request) {
 		if status {
 			resp["token"] = token
 		} else {
-			resp["error"] = "Coulnd't sign up"
+			resp["error"] = "Такой пользователь уже существует"
 		}
 
 		if err := ws.WriteJSON(resp); err != nil {

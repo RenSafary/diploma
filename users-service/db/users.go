@@ -33,6 +33,22 @@ func (c *Users) CreateUser(username, password, firstname, lastname, email, sex, 
 		return 0, err
 	}
 
+	// if user already exists
+	query := `
+		SELECT EXISTS (
+			SELECT 1 FROM users WHERE email = $1 or username = $2
+		)
+	`
+	var exists bool
+
+	err = c.DB.QueryRow(query, email, username).Scan(&exists)
+	if err != nil {
+		return 0, err
+	}
+	if exists == false {
+		return -1, nil
+	}
+
 	// making hashed password
 	hashedPass, err := utils.MakeHashed(password)
 	if err != nil {
