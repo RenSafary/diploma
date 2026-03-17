@@ -28,12 +28,9 @@ func Sex(s userspb.Sex) string {
 
 func (s *UsersService) CreateUser(ctx context.Context, req *userspb.CreateUserRequest) (*userspb.CreateUserResponse, error) {
 	sex := Sex(req.Sex)
-	id, err := s.DB.Users.CreateUser(req.Username, req.Password, req.Firstname, req.Lastname, req.Email, sex, req.Age)
+	_, err := s.DB.Users.CreateUser(req.Username, req.Password, req.Firstname, req.Lastname, req.Email, sex, req.Age)
 	if err != nil {
 		return &userspb.CreateUserResponse{Status: false, Token: ""}, nil
-	}
-	if id == -1 {
-		return &userspb.CreateUserResponse{Status: false, Token: "User already exists"}, nil
 	}
 
 	// giving token
